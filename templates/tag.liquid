@@ -25,7 +25,7 @@
               <td class="tag-table__title">
                 <a href="{{ post.url }}">{{ post.title }}</a>
               </td>
-              <td class="tag-table__views">{{ post.view_count | default: '—' }}</td>
+              <td class="tag-table__views">{{ post | view_count | default: '—' }}</td>
               <td class="tag-table__date">{{ post.published_at | local_date: '%b %e, %Y' }}</td>
               <td class="tag-table__excerpt">{{ post.excerpt_or_body | strip_html | truncatewords: 20 }}</td>
               <td class="tag-table__comments">{{ post.response_count | default: 0 }}</td>
