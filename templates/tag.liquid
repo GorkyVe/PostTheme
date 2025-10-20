@@ -1,6 +1,60 @@
-<h2>
-  Posts for Tag:
-  <strong>{{ tag.name }}</strong>
-</h2>
+<section class="tag-page">
+  <header class="tag-page__header">
+    <h2>Tag</h2>
+    <h1>{{ tag.name }}</h1>
+    <p class="tag-page__meta">{{ tag.post_count }} {{ tag.post_count | pluralize: 'post', 'posts' }}</p>
+  </header>
 
-{% include 'posts' %}
+  {% if posts == empty %}
+    <p class="tag-page__empty">There aren’t any posts filed under this tag yet.</p>
+  {% else %}
+    <div class="tag-table__wrapper">
+      <table class="tag-table">
+        <thead>
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Views</th>
+            <th scope="col">Date Added</th>
+            <th scope="col">Content</th>
+            <th scope="col">Comments</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for post in posts %}
+            <tr>
+              <td class="tag-table__title">
+                <a href="{{ post.url }}">{{ post.title }}</a>
+              </td>
+              <td class="tag-table__views">{{ post.view_count | default: '—' }}</td>
+              <td class="tag-table__date">{{ post.published_at | local_date: '%b %e, %Y' }}</td>
+              <td class="tag-table__excerpt">{{ post.excerpt_or_body | strip_html | truncatewords: 20 }}</td>
+              <td class="tag-table__comments">{{ post.response_count | default: 0 }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if posts.pagination %}
+      <footer class="pagination">
+        <div class="prev-link">
+          {% if posts.pagination.previous %}
+            <a href="{{ posts.pagination.previous.url }}">Previous</a>
+          {% else %}
+            <span>Previous</span>
+          {% endif %}
+        </div>
+
+        <div class="page-num">Page {{ posts.current_page }} of {{ posts.total_pages }}</div>
+
+        <div class="next-link">
+          {% if posts.pagination.next %}
+            <a class="next-link" href="{{ posts.pagination.next.url }}">Next</a>
+          {% else %}
+            <span>Next</span>
+          {% endif %}
+        </div>
+      </footer>
+    {% endif %}
+  {% endif %}
+</section>
